@@ -17,6 +17,7 @@ export default tseslint.config(
 	...tseslint.configs.stylisticTypeChecked,
 	{
 		plugins: {
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 			"typescript-sort-keys": eslintPluginSortKeys,
 		},
 		rules: {
