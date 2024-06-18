@@ -6,7 +6,7 @@
 		"perspective",
 		"perspective-api"
 	],
-	"repository": "sloria/perspective-api-client",
+	"repository": "kduprey/perspective-api-client",
 	"license": "MIT",
 	"author": {
 		"name": "Kenton Duprey",
