@@ -1,5 +1,3 @@
-// @ts-check
-
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
 import eslintPluginSortKeys from "eslint-plugin-typescript-sort-keys";
