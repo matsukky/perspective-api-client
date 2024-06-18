@@ -5,12 +5,10 @@ import Perspective, { ResponseError, TextTooLongError } from "./index";
 import type { AnalyzeResponse } from "./types/index";
 
 beforeEach(() => {
-	console.log("beforeEach");
 	nock.disableNetConnect();
 });
 
 afterEach(() => {
-	console.log("afterEach");
 	nock.enableNetConnect();
 });
 
