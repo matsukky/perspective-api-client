@@ -61,4 +61,4 @@ typings/
 .env
 
 # TypeScript build output
-dist/
+/dist
