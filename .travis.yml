@@ -1,9 +1,14 @@
 language: node_js
 env:
   global:
-  - TEST_INTEGRATION=1
+    - TEST_INTEGRATION=1
 node_js:
-- '10'
-- '8'
-- '6'
+  - "20"
+  - "18"
+  - "16"
+  - "14"
+  - "12"
+  - "10"
+  - "8"
+  - "6"
 sudo: false

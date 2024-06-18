@@ -1,204 +1,234 @@
-# perspective-api-client
+# Perspective API Client SDK
 
-[![Current Version](https://img.shields.io/npm/v/perspective-api-client.svg)](https://www.npmjs.org/package/perspective-api-client)
-[![Build Status](https://travis-ci.org/sloria/perspective-api-client.svg?branch=master)](https://travis-ci.org/sloria/perspective-api-client)
+Welcome to the Perspective API Client SDK! This SDK is built with TypeScript and provides an easy way to interact with the Perspective API for analyzing the toxicity of comments.
 
-Node.js client library for the [Perspective API](https://www.perspectiveapi.com/).
+## Table of Contents
 
-## Install
+- [Installation](#installation)
+- [Usage](#usage)
+- [API](#api)
+  - [Constructor](#constructor)
+  - [Methods](#methods)
+  - [Errors](#errors)
+- [Types](#types)
+- [Examples](#examples)
+- [Contributing](#contributing)
+- [License](#license)
 
+## Installation
+
+To install the SDK, you can use npm or yarn:
+
+```sh
+npm install perspective-api-client
 ```
-$ npm install perspective-api-client
+
+or
+
+```sh
+yarn add perspective-api-client
 ```
 
 ## Usage
 
-```js
-const Perspective = require('perspective-api-client');
-const perspective = new Perspective({apiKey: process.env.PERSPECTIVE_API_KEY});
+First, import and instantiate the `Perspective` class with your API key:
 
-(async () => {
-  const text = 'you empty-headed animal food trough wiper!';
-  const result = await perspective.analyze(text);
-  console.log(JSON.stringify(result, null, 2));
-})();
-// {
-//   "attributeScores": {
-//     "TOXICITY": {
-//       "spanScores": [
-//         {
-//           "begin": 0,
-//           "end": 42,
-//           "score": {
-//             "value": 0.77587414,
-//             "type": "PROBABILITY"
-//           }
-//         }
-//       ],
-//       "summaryScore": {
-//         "value": 0.77587414,
-//         "type": "PROBABILITY"
-//       }
-//     }
-//   },
-//   "languages": [
-//     "en"
-//   ]
-// }
+```typescript
+import Perspective from 'perspective-api-client';
+
+const perspective = new Perspective({ apiKey: 'YOUR_API_KEY' });
 ```
 
-### Specifying models
+### Analyze a Comment
 
-The TOXICITY model is used by default. To specify additional models,
-    pass `options.attributes`.
-
-```js
+```typescript
 (async () => {
-  const text = 'fools!';
-  const result = await perspective.analyze(text, {attributes: ['unsubstantial', 'spam']});
-  console.log(JSON.stringify(result, null, 2));
+  try {
+    const response = await perspective.analyze('Your comment text here', ['TOXICITY']);
+    console.log(response);
+  } catch (error) {
+    console.error(error);
+  }
 })();
-// {
-//   "attributeScores": {
-//     "UNSUBSTANTIAL": {
-//       "spanScores": [
-//         {
-//           "begin": 0,
-//           "end": 6,
-//           "score": {
-//             "value": 0.9592708,
-//             "type": "PROBABILITY"
-//           }
-//         }
-//       ],
-//       "summaryScore": {
-//         "value": 0.9592708,
-//         "type": "PROBABILITY"
-//       }
-//     },
-//     "SPAM": {
-//       "spanScores": [
-//         {
-//           "begin": 0,
-//           "end": 6,
-//           "score": {
-//             "value": 0.008744183,
-//             "type": "PROBABILITY"
-//           }
-//         }
-//       ],
-//       "summaryScore": {
-//         "value": 0.008744183,
-//         "type": "PROBABILITY"
-//       }
-//     }
-//   },
-//   "languages": [
-//     "en"
-//   ]
-// }
-```
-
-### More options
-
-You can also pass an [AnalyzeComment](https://github.com/conversationai/perspectiveapi/blob/master/api_reference.md#analyzecomment-request)
-object for more control over the request.
-
-```js
-(async () => {
-  const text = 'you empty-headed animal food trough wiper!';
-  const result = await perspective.analyze({
-    comment: {text},
-    requestedAttributes: {TOXICITY: {scoreThreshold: 0.7}},
-  });
-  console.log(JSON.stringify(result, null, 2));
-})();
-// {
-//   "attributeScores": {
-//     "TOXICITY": {
-//       "spanScores": [
-//         {
-//           "begin": 0,
-//           "end": 42,
-//           "score": {
-//             "value": 0.77587414,
-//             "type": "PROBABILITY"
-//           }
-//         }
-//       ],
-//       "summaryScore": {
-//         "value": 0.77587414,
-//         "type": "PROBABILITY"
-//       }
-//     }
-//   },
-//   "languages": [
-//     "en"
-//   ]
-// }
 ```
 
 ## API
 
-### perspective = new Perspective()
+### Constructor
 
-#### analyze(text, [options])
+#### `new Perspective(options: { apiKey: string })`
 
-#### text
+- **options.apiKey**: Your API key for accessing the Perspective API.
 
-Type: `String` or `Object`
+### Methods
 
-Either the text to analyze or an [AnalyzeComment](https://github.com/conversationai/perspectiveapi/blob/master/api_reference.md#analyzecomment-request) object.
-HTML tags will be stripped by default.
+#### `analyze(text: string, attributes?: Partial<Record<AttributeType, RequestedAttribute>> | AttributeType[], options?: CommentRequestOptions): Promise<AnalyzeResponse>`
 
-##### options
+Analyzes a comment for specified attributes.
 
-###### attributes
+- **text**: The comment text to analyze.
+- **attributes**: The attributes to request scores for. Defaults to `TOXICITY` if not specified.
+- **options**: Additional request [options](#options-parameter) to customize the analysis request.
 
-Type: `Array` or `Object`
+### `options` Parameter
 
-Model names to analyze. `TOXICITY` is analyzed by default. If passing an Array of names, the names may be lowercased.
-See https://github.com/conversationai/perspectiveapi/blob/master/api_reference.md#models
-for a list of valid models.
+The `options` parameter in the `analyze` function is an optional configuration object that allows you to customize the behavior of the Perspective API request. It can include the following properties:
 
-###### doNotStore
+#### `clientToken`
 
-Type: `Boolean`
-Default: `true`
+- **Type:** `string`
+- **Description:** An opaque token that is echoed back in the response. This can be used to correlate requests and responses.
 
-If `true`, prevent API from storing comment and context from this request.
+#### `communityId`
 
-##### stripHTML
+- **Type:** `string`
+- **Description:** An opaque identifier associating this comment with a particular community within your platform. If set, this field allows Perspective API to differentiate comments from different communities, as each community may have different norms.
 
-Type: `Boolean`
-Default: `true`
+#### `context`
 
-Whether to strip HTML tags from the text.
+- **Type:** `object`
+  - **`entries`**: `ContextEntry[]` (optional)
+- **Description:** The context of the request. `ContextEntry` is a list of objects providing the context for the comment. The API currently does not make use of this field, but it may influence API responses in the future.
 
-##### truncate
+#### `doNotStore`
 
-Type: `Boolean`
-Default: `false`
+- **Type:** `boolean`
+- **Default:** `false`
+- **Description:** Whether the API is permitted to store the comment and context from this request. Stored comments will be used for future research and community attribute building purposes to improve the API over time. Set this to `true` if the data being submitted is private or contains content written by someone under 13 years old.
 
-If `true`, truncate text to the first 20480 characters (max length
-    allowed by the Perspective API).
+#### `languages`
 
-## FAQ
+- **Type:** `string[]`
+- **Description:** A list of ISO 631-1 two-letter language codes specifying the language(s) that the comment is in (e.g., `"en"`, `"es"`, `"fr"`, `"de"`, etc.). If unspecified, the API will auto-detect the comment language. If language detection fails, the API returns an error.
 
-### How does this compare to @conversationai/perspectiveapi-js-client?
+#### `sessionId`
 
-Similarities:
+- **Type:** `string`
+- **Description:** An opaque session ID. This should be set for authorship experiences by the client side so that groups of requests can be grouped together into a session. This is intended for abuse protection and individual sessions of interaction.
 
-- Exposes the AnalyzeComment endpoint of the Perspective API
-- Strips HTML tags by default
+#### `spanAnnotations`
 
-Differences:
+- **Type:** `boolean`
+- **Default:** `false`
+- **Description:** A boolean value that indicates if the request should return spans that describe the scores for each part of the text (currently done at the per-sentence level).
 
+### Example Usage
 
-- Returns full responses (rather than only returning summary scores)
-- Exposes all [AnalyzeComment](https://github.com/conversationai/perspectiveapi/blob/master/api_reference.md#analyzecomment-request) options
-- Supports all Node.js LTS versions
+Here's how you can use the `options` parameter when calling the `analyze` function:
+
+```typescript
+const perspective = new Perspective({ apiKey: "your-api-key" });
+
+const text = "This is a sample comment.";
+const attributes = { TOXICITY: {} };
+
+const options = {
+  clientToken: "1234567890",
+  communityId: "my-community",
+  context: {
+    entries: [
+      { text: "This is some context for the comment." }
+    ]
+  },
+  doNotStore: true,
+  languages: ["en"],
+  sessionId: "abc123",
+  spanAnnotations: true
+};
+
+perspective.analyze(text, attributes, options)
+  .then(response => {
+    console.log(response);
+  })
+  .catch(error => {
+    console.error(error);
+  });
+```
+
+In this example, the `options` object includes all the possible properties to configure the analysis request, such as specifying a client token, community ID, context, language, session ID, and whether to include span annotations in the response.
+
+### Errors
+
+#### `PerspectiveAPIClientError`
+
+Base class for all SDK errors.
+
+#### `TextEmptyError`
+
+Thrown when the provided comment text is empty.
+
+#### `TextTooLongError`
+
+Thrown when the provided comment text exceeds the maximum length of 20480 characters.
+
+#### `ResponseError`
+
+Thrown when there is an error in the API response.
+
+## Types
+
+The SDK provides various TypeScript types for strong typing and better developer experience.
+
+### `AnalyzeCommentRequest`
+
+Request body for the Perspective API's `analyzeComment` method.
+
+### `AnalyzeResponse`
+
+Response body for the Perspective API's `analyzeComment` method.
+
+### `AttributeType`
+
+All available attributes in the Perspective API.
+
+### `RequestedAttribute`
+
+Configuration object for requested attributes.
+
+### `CommentRequestOptions`
+
+Additional options for the comment request.
+
+For a detailed list of all types and interfaces, refer to the source code or documentation.
+
+## Examples
+
+### Analyze a Comment with Multiple Attributes
+
+```typescript
+(async () => {
+  try {
+    const response = await perspective.analyze('Your comment text here', {
+      TOXICITY: {},
+      SEVERE_TOXICITY: { scoreThreshold: 0.8 }
+    });
+    console.log(response);
+  } catch (error) {
+    console.error(error);
+  }
+})();
+```
+
+### Handle Errors
+
+```typescript
+(async () => {
+  try {
+    const response = await perspective.analyze('');
+  } catch (error) {
+    if (error instanceof perspective.TextEmptyError) {
+      console.error('The comment text is empty.');
+    } else {
+      console.error('An error occurred:', error);
+    }
+  }
+})();
+```
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request on GitHub.
 
 ## License
 
-MIT © [Steven Loria](http://stevenloria.com)
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
