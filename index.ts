@@ -203,7 +203,6 @@ export class Perspective {
 			| Partial<Record<AttributeType, RequestedAttribute>>
 			| Partial<AttributeType>[]
 	): Partial<Record<AttributeType, RequestedAttribute>> {
-		// Convert attributes to array of objects
 		if (Array.isArray(attributes)) {
 			return attributes.reduce<Partial<Record<AttributeType, RequestedAttribute>>>(
 				(acc, attribute) => {
@@ -213,7 +212,7 @@ export class Perspective {
 				{}
 			);
 		}
-		// Make sure requested attributes score type is between 0 and 1
+
 		Object.values(attributes).forEach((attribute) => {
 			if (
 				attribute.scoreThreshold &&
