@@ -94,7 +94,7 @@ export class TextTooLongError extends PerspectiveAPIClientError {
 	}
 }
 
-export default class ResponseError extends PerspectiveAPIClientError {
+export class ResponseError extends PerspectiveAPIClientError {
 	response: AxiosError;
 
 	constructor(message: string, response: AxiosError) {
@@ -104,7 +104,7 @@ export default class ResponseError extends PerspectiveAPIClientError {
 	}
 }
 
-class Perspective {
+export default class Perspective {
 	static readonly PerspectiveAPIClientError: typeof PerspectiveAPIClientError;
 	static readonly TextEmptyError: typeof TextEmptyError;
 	static readonly TextTooLongError: typeof TextTooLongError;
