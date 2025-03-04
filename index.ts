@@ -94,7 +94,7 @@ export class TextTooLongError extends PerspectiveAPIClientError {
 	}
 }
 
-export class ResponseError extends PerspectiveAPIClientError {
+export default class ResponseError extends PerspectiveAPIClientError {
 	response: AxiosError;
 
 	constructor(message: string, response: AxiosError) {
@@ -226,7 +226,5 @@ class Perspective {
 		return attributes;
 	}
 }
-
-export default Perspective;
 
 export * as Types from "./types";
