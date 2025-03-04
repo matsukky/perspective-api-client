@@ -1,6 +1,6 @@
 {
   "name": "@matsukky/perspective-client",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Client library for the Perspective API",
   "keywords": [
     "perspective",

@@ -104,7 +104,7 @@ export class ResponseError extends PerspectiveAPIClientError {
 	}
 }
 
-export default class Perspective {
+export class Perspective {
 	static readonly PerspectiveAPIClientError: typeof PerspectiveAPIClientError;
 	static readonly TextEmptyError: typeof TextEmptyError;
 	static readonly TextTooLongError: typeof TextTooLongError;
@@ -228,3 +228,5 @@ export default class Perspective {
 }
 
 export * as Types from "./types";
+
+export default Perspective;
