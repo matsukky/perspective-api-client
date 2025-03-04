@@ -20,13 +20,9 @@ Welcome to the Perspective API Client SDK! This SDK is built with TypeScript and
 To install the SDK, you can use npm or yarn:
 
 ```sh
-npm install perspective-api-client
-```
-
-or
-
-```sh
-yarn add perspective-api-client
+npm install matsukky@perspective-client
+yarn add matsukky@perspective-client
+bun add matsukky@perspective-client
 ```
 
 ## Usage
@@ -34,7 +30,7 @@ yarn add perspective-api-client
 First, import and instantiate the `Perspective` class with your API key:
 
 ```typescript
-import Perspective from 'perspective-api-client';
+import Perspective from 'matsukky@perspective-client';
 
 const perspective = new Perspective({ apiKey: 'YOUR_API_KEY' });
 ```

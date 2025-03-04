@@ -1,4 +1,4 @@
-import type { LanguageCode } from "iso-639-1";
+export type LanguageCode = 'ar' | 'zh' | 'cs' | 'nl' | 'en' | 'fr' | 'de' | 'hi' | 'hi-Latn' | 'id' | 'it' | 'ja' | 'ko' | 'pl' | 'pt' | 'ru' | 'es' | 'sv' ;
 
 /**
  * Comment is a type that represents the comment in the Perspective API's analyzeComment method.
